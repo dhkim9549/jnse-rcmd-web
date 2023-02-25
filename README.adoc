@@ -10,6 +10,8 @@ You will build a webpage which will bypass _the Public Data Portal API server_ a
 
 See the following guide for reference:
 
+* http://bada.ai/hf-api/hg-jnse-rcmd.html [prototype]
+
 * https://github.com/dhkim9549/key-rest-api [API key REST server]
 
 * https://github.com/dhkim9549/api-key-load [API key generator]
