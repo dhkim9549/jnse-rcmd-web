@@ -1,6 +1,6 @@
 == What You Will Build
 
-You will build a webpage which will bypass the Public Data Portal API server and connect directly to HF API server.
+You will build a webpage which will bypass _the Public Data Portal API server_ and connect directly to HF API server.
 
 == See Also
 
