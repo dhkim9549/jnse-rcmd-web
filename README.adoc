@@ -1,6 +1,6 @@
 == What You Will Build
 
-You will build a webpage which calls directly HF Open API server bypassing _the Public Data Portal API server_.
+You will build a webpage which directly calls HF Open API server bypassing _the Public Data Portal API server_.
 
 * Due to the CORS restriction, the webpage uses a proxy server to call the HF Open API server.
 * An API key is necessary to call HF Open API server.
