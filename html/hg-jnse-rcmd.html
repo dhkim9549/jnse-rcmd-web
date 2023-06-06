@@ -267,156 +267,224 @@ a {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/df-number-format/2.1.6/jquery.number.min.js"></script>
 
 <!-- tailwindcss -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
 <script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-	theme: {
-		extend: {
-			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-			},
-		}
-	}
-}
-</script>
 
 <script>
-
 var dd;
-var zloanYm;
 
 function getRadioButtonValue(varName) {
-  const radioButtons = document.querySelectorAll('input[name=' + varName +']');
-  let selectedValue;
-  for (const radioButton of radioButtons) {
-    if (radioButton.checked) {
-      selectedValue = radioButton.value;
-      break;
-    }
-  }
-  return selectedValue;
+	const radioButtons = document.querySelectorAll('input[name=' + varName +']');
+	let selectedValue;
+	for (const radioButton of radioButtons) {
+		if (radioButton.checked) {
+			selectedValue = radioButton.value;
+			break;
+		}
+	}
+	return selectedValue;
 }        
 
 function getList() {
 
-  var board1 = document.getElementById("board1");
-  board1.innerHTML = "";
-  document.getElementById("board1").style = "background-color: #31d8d0;";
+	var board1 = document.getElementById("board1");
+	board1.innerHTML = "";
+	document.getElementById("board1").style = "background-color: #31d8d0;";
 
-/*
+	/*
 hg-jnse-rcmd-response.json
 https://hion-dev.khfc.co.kr/cor/hg-jnse-rcmd-get.jsp
 https://openapi.hf.go.kr:10880/jnse-rcmd-info/jnse-rcmd-list?dataType=json&SG_APIM=0Yhb9NC0yOr0w2oZb0y_dq-VXWxMBWZ5T5Nj7XF7gDI&age=99&addr1=서울&weddStcd=1&rentGrntAmt=200000000&myIncmAmt=0&myTotDebtAmt=0
-*/
+	 */
 
-  fetch("http://bada.ai:8083/hf-api-proxy/jnse-rcmd-info"
-        + "?dataType=json"
-		
-        + "&rentGrntAmt=" + rentGrntAmt.value.replaceAll(",", "")
-        + "&addr1=" + encodeURIComponent(addr1.value)
-        + "&addr2=" + encodeURIComponent(addr2.value)
-        + "&age=" + age.value.replaceAll(",", "")
-        + "&weddStcd=" + getRadioButtonValue("weddStcd")
-        + "&myIncmAmt=" + myIncmAmt.value.replaceAll(",", "")
-        + "&myTotDebtAmt=" + myTotDebtAmt.value.replaceAll(",", "")
-        + "&sposAnnlIncmAmt=" + sposAnnlIncmAmt.value.replaceAll(",", "")
-        + "&sposDebtAmt=" + sposDebtAmt.value.replaceAll(",", "")
-        + "&ownHsCnt=" + ownHsCnt.value.replaceAll(",", "")
-        + "&chldCnt=" + chldCnt.value.replaceAll(",", "")
+	fetch("http://bada.ai:8083/hf-api-proxy/jnse-rcmd-info"
+		+ "?dataType=json"
 
-        + "&sngpHhldYn=" + getRadioButtonValue("sngpHhldYn")
-        + "&plcyCmnrFinUseYn=" + getRadioButtonValue("plcyCmnrFinUseYn")
-        + "&petySoweSftprYn=" + getRadioButtonValue("petySoweSftprYn")
-        + "&crdtRcvrSprtYn=" + getRadioButtonValue("crdtRcvrSprtYn")
-        + "&soclCnsdCndtYn=" + getRadioButtonValue("soclCnsdCndtYn")
-        + "&dsblHhldYn=" + getRadioButtonValue("dsblHhldYn")
-        + "&ntonMrorHhldYn=" + getRadioButtonValue("ntonMrorHhldYn")
-        + "&kwrcHhldYn=" + getRadioButtonValue("kwrcHhldYn")
-        + "&mlfmYn=" + getRadioButtonValue("mlfmYn")
+		+ "&rentGrntAmt=" + rentGrntAmt.value.replaceAll(",", "")
+		+ "&addr1=" + encodeURIComponent(addr1.value)
+		+ "&addr2=" + encodeURIComponent(addr2.value)
+		+ "&age=" + age.value.replaceAll(",", "")
+		+ "&weddStcd=" + getRadioButtonValue("weddStcd")
+		+ "&myIncmAmt=" + myIncmAmt.value.replaceAll(",", "")
+		+ "&myTotDebtAmt=" + myTotDebtAmt.value.replaceAll(",", "")
+		+ "&ownHsCnt=" + ownHsCnt.value.replaceAll(",", "")
 
-       )
-    .then(r => r.json())
-    .then(d => {
+		+ "&grntPrmeActnDvcdCont="
+		+ encodeURIComponent(
+			(getRadioButtonValue("grntPrmeActnDvcdCont01Yn") == "Y" ? "01|" : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont02Yn") == "Y" ? "02|" : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont03Yn") == "Y" ? "03|" : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont04Yn") == "Y" ? "04|" : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont05Yn") == "Y" ? "05|" : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont06Yn") == "Y" ? "06|" : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont07Yn") == "Y" ? "07|" : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont08Yn") == "Y" ? "08|" : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont09Yn") == "Y" ? "09|" : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont10Yn") == "Y" ? "10|" : "")
+		)
+	)
+		.then(r => r.json())
+		.then(d => {
 
-        dd = d;
-        var items = d.body.items;
-        
-        var rcmdCmt = document.getElementById("rcmdCmt");
-        if(items.length == 0) {
-          rcmdCmt.innerHTML = "추천 보증상품이 없습니다.";
-        } else {
-          rcmdCmt.innerHTML = items.length + " 개의 보증상품을 추천합니다.";
-        }
-        
-        items.forEach(element => {
-        
-            var e = document.createElement('div');
-            board1.append(e);
-            
-            var e1 = document.createElement('p');
-            e1.innerHTML = element.prodNm;
-            e.append(e1);
-			
-            var e20 = document.createElement('div');
-            e20.innerHTML = "추천순위: " + element.prorRnk;
-            e.append(e20);
-            
-            var e21 = document.createElement('div');
-            e21.innerHTML = "보증구분코드: " + element.grntDvcd;
-            e.append(e21);
+			dd = d;
+			var items = d.body.items;
 
-            var e22 = document.createElement('div');
-            e22.innerHTML = "보증한도금액: " + $.number(element.grntLmtAmt);
-            e.append(e22);
+			var rcmdCmt = document.getElementById("rcmdCmt");
+			if(items.length == 0) {
+				rcmdCmt.innerHTML = "추천 보증상품이 없습니다.";
+			} else {
+				rcmdCmt.innerHTML = items.length + " 개의 보증상품을 추천합니다.";
+			}
 
-            var e23 = document.createElement('div');
-            e23.innerHTML = "대출한도금액: " + $.number(element.loanLmtAmt);
-            e.append(e23);
-            
-            var e24 = document.createElement('div');
-            e24.className = "cont";
-            e24.innerHTML = element.cont1.replaceAll("\n", "<br>");;
-            e.append(e24);
-            
-        });
-        document.getElementById("board1").style = "background-color: #fbfbfd;";
-    });
+			items.forEach(element => {
+
+				var e = document.createElement('div');
+				board1.append(e);
+
+				var e1 = document.createElement('p');
+				e1.innerHTML = element.prodNm;
+				e.append(e1);
+
+				var e20 = document.createElement('div');
+				e20.innerHTML = "추천순위: " + element.rcmdProrRnk;
+				e.append(e20);
+
+				var e21 = document.createElement('div');
+				e21.innerHTML = "보증구분코드: " + element.grntDvcd;
+				e.append(e21);
+
+				var e22 = document.createElement('div');
+				e22.innerHTML = "추천보증상품구분: " + element.rcmdGrntProdDvcd;
+				e.append(e22);
+
+				var e23 = document.createElement('div');
+				e23.innerHTML = "최대보증한도: " + $.number(element.grntLmtAmt);
+				e.append(e23);
+
+				var e24 = document.createElement('div');
+				e24.innerHTML = "최대대출한도: " + $.number(element.loanLmtAmt);
+				e.append(e24);
+
+				var e25 = document.createElement('div');
+				e25.className = "cont";
+				e25.innerHTML = "신청대상 요약: " + element.cont1.replaceAll("\n", "<br>");
+				e.append(e25);
+
+				var e26 = document.createElement('div');
+				e26.className = "cont";
+				e26.innerHTML = "문의처정보(JSON array): " + element.cont2;
+				e.append(e26);
+
+				var e27 = document.createElement('div');
+				var e271 = document.createElement('ul');
+				e271.className = "px-8 list-disc";
+				var lstCnct = JSON.parse(element.cont2);
+				lstCnct.forEach(function(cnct) {
+					var e2711 = document.createElement('li');
+					e2711.innerHTML = cnct.bnkNm + ' &#9742; ' + cnct.telNo;
+					e271.append(e2711);
+				});
+				e27.innerHTML = "문의처정보(목록)";
+				e27.append(e271);
+				e.append(e27);
+
+				var e28 = document.createElement('div');
+				e28.innerHTML = "링크: " + element.url;
+				e.append(e28);
+
+				var e29 = document.createElement('div');
+                                e29.innerHTML = "링크설명: " + element.cont3;
+                                e.append(e29);
+
+				var e2X = document.createElement('a');
+				e2X.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
+				e2X.innerHTML = element.cont3;
+				e2X.setAttribute("href", element.url);
+				e2X.setAttribute("target", "_black");
+				e.append(e2X);
+
+				var e2A = document.createElement('div');
+                                e2A.innerHTML = "보증한도 2억초과 여부: " + element.grntLmtHm2ExcsYn;
+                                e.append(e2A);
+
+				var e2B = document.createElement('div');
+                                e2B.innerHTML = "전월 보증부대출 적용금리: " + $.number(element.grntLmtHm2ExcsYn, 2);
+                                e.append(e2B);
+
+				var e2C = document.createElement('div');
+                                e2C.innerHTML = "최대이자지원: " + $.number(element.maxIntSprtRat, 2);
+                                e.append(e2C);
+
+				var e2D = document.createElement('div');
+                                e2D.innerHTML = "최저이자지원: " + $.number(element.minIntSprtRat, 2);
+                                e.append(e2D);
+
+				var e2E = document.createElement('div');
+                                e2E.innerHTML = "예상 보증료율: " + element.cont4;
+                                e.append(e2E);
+
+				var e2F = document.createElement('div');
+				e2F.className = "cont";
+                                e2F.innerHTML = "우대내용: " + element.cont5;
+                                e.append(e2F);
+
+				var e2G = document.createElement('div');
+				e2F.className = "cont";
+                                e2G.innerHTML = "취급은행: " + element.cont6;
+                                e.append(e2G);
+
+                                var e2H = document.createElement('div');
+                                var e2H1 = document.createElement('ul');
+                                e2H1.className = "px-8 list-disc";
+                                var lstBnk = element.cont6.split('|');
+                                lstBnk.forEach(function(bnkNm) {
+                                        var e2H11 = document.createElement('li');
+                                        e2H11.innerHTML = bnkNm;
+                                        e2H1.append(e2H11);
+                                });
+                                e2H.innerHTML = "취급은행(목록)";
+                                e2H.append(e2H1);
+                                e.append(e2H);
+
+
+
+
+
+
+
+
+			});
+			document.getElementById("board1").style = "background-color: #fbfbfd;";
+		});
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-  document.getElementById("button1").addEventListener("click", function() {
-    getList();
-  });
-  document.getElementById("input_area").addEventListener('keydown', (e) => {
-    if(e.key == "Enter") {
-      document.getElementById("button1").click(); 
-    }
-  });
+	document.getElementById("button1").addEventListener("click", function() {
+		getList();
+	});
+	document.getElementById("input_area").addEventListener('keydown', (e) => {
+		if(e.key == "Enter") {
+			document.getElementById("button1").click(); 
+		}
+	});
 
-  numberFormat('rentGrntAmt');
-  numberFormat('age');
-  numberFormat('myIncmAmt');
-  numberFormat('myTotDebtAmt');
-  numberFormat('sposAnnlIncmAmt');
-  numberFormat('sposDebtAmt');
-  numberFormat('ownHsCnt');
-  numberFormat('chldCnt');
-  
-  document.getElementById("rentGrntAmt").focus();
+	numberFormat('rentGrntAmt');
+	numberFormat('age');
+	numberFormat('myIncmAmt');
+	numberFormat('myTotDebtAmt');
+	numberFormat('ownHsCnt');
+
+	document.getElementById("rentGrntAmt").focus();
 });
 
 function numberFormat(elementId) {
-  let element = document.getElementById(elementId);
-  element.addEventListener("input", function(event) {
-    element.value = element.value.replace(/[^0-9]/g, '');
-    element.value = numberWithCommas(element.value);
-  });
+	let element = document.getElementById(elementId);
+	element.addEventListener("input", function(event) {
+		element.value = element.value.replace(/[^0-9]/g, '');
+		element.value = numberWithCommas(element.value);
+	});
 }
 function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 
@@ -462,84 +530,79 @@ function numberWithCommas(x) {
     <label for="myTotDebtAmt" class="label_req">본인 부채 (myTotDebtAmt)</label>
     <input type="text" id="myTotDebtAmt" name="myTotDebtAmt" minlength="4" maxlength="16" size="20" class="prc_textinput" style="text-align: end;">
   </div>
-  <div class="preference">
-    <label for="sposAnnlIncmAmt" class="label_req">배우자 연소득 (sposAnnlIncmAmt)</label>
-    <input type="text" id="sposAnnlIncmAmt" name="sposAnnlIncmAmt" minlength="4" maxlength="16" size="20" class="prc_textinput" style="text-align: end;">
-  </div>
-  <div class="preference">
-    <label for="sposDebtAmt" class="label_req">배우자 부채 (sposDebtAmt)</label>
-    <input type="text" id="sposDebtAmt" name="sposDebtAmt" minlength="4" maxlength="16" size="20" class="prc_textinput" style="text-align: end;">
-  </div>
-  <div class="preference">
+ <div class="preference">
     <label for="ownHsCnt" class="label_req">주택보유수 (ownHsCnt)</label>
     <input type="text" id="ownHsCnt" name="ownHsCnt" maxlength="3" size="20" class="prc_textinput" style="text-align: end;">
   </div>
-  <div class="preference">
-    <label for="chldCnt" class="label_req">자녀수 (chldCnt)</label>
-    <input type="text" id="chldCnt" name="chldCnt" maxlength="3" size="20" class="prc_textinput" style="text-align: end;">
+ <div class="preference">
+    <label for="" class="label_req">2자녀이상여부 (grntPrmeActnDvcdCont01Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont01YnY" name="grntPrmeActnDvcdCont01Yn" value="Y"><label for="grntPrmeActnDvcdCont01YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont01YnN" name="grntPrmeActnDvcdCont01Yn" value="N" checked><label for="grntPrmeActnDvcdCont01YnN">아니오</label>
+    </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">한부모가구여부 (sngpHhldYn)</label>
+    <label for="" class="label_req">다문화가정여부 (grntPrmeActnDvcdCont02Yn)</label>
     <div class="checks">
-      <input type="radio" id="sngpHhldYnY" name="sngpHhldYn" value="Y"><label for="sngpHhldYnY">예</label>
-      <input type="radio" id="sngpHhldYnN" name="sngpHhldYn" value="N" checked><label for="sngpHhldYnN">아니오</label>
-    </div>  
+      <input type="radio" id="grntPrmeActnDvcdCont02YnY" name="grntPrmeActnDvcdCont02Yn" value="Y"><label for="grntPrmeActnDvcdCont02YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont02YnN" name="grntPrmeActnDvcdCont02Yn" value="N" checked><label for="grntPrmeActnDvcdCont02YnN">아니오</label>
+    </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">정책서민금융이용여부 (plcyCmnrFinUseYn)</label>
+    <label for="" class="label_req">한부모가구여부 (grntPrmeActnDvcdCont03Yn)</label>
     <div class="checks">
-      <input type="radio" id="plcyCmnrFinUseYnY" name="plcyCmnrFinUseYn" value="Y"><label for="plcyCmnrFinUseYnY">예</label>
-      <input type="radio" id="plcyCmnrFinUseYnN" name="plcyCmnrFinUseYn" value="N" checked><label for="plcyCmnrFinUseYnN">아니오</label>
-    </div>  
+      <input type="radio" id="grntPrmeActnDvcdCont03YnY" name="grntPrmeActnDvcdCont03Yn" value="Y"><label for="grntPrmeActnDvcdCont03YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont03YnN" name="grntPrmeActnDvcdCont03Yn" value="N" checked><label for="grntPrmeActnDvcdCont03YnN">아니오</label>
+    </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">영세자영업자여부 (petySoweSftprYn)</label>
+    <label for="" class="label_req">정책서민금융이용자여부 (grntPrmeActnDvcdCont04Yn)</label>
     <div class="checks">
-      <input type="radio" id="petySoweSftprYnY" name="petySoweSftprYn" value="Y"><label for="petySoweSftprYnY">예</label>
-      <input type="radio" id="petySoweSftprYnN" name="petySoweSftprYn" value="N" checked><label for="petySoweSftprYnN">아니오</label>
-    </div>  
+      <input type="radio" id="grntPrmeActnDvcdCont04YnY" name="grntPrmeActnDvcdCont04Yn" value="Y"><label for="grntPrmeActnDvcdCont04YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont04YnN" name="grntPrmeActnDvcdCont04Yn" value="N" checked><label for="grntPrmeActnDvcdCont04YnN">아니오</label>
+    </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">신용회복지원여부 (crdtRcvrSprtYn)</label>
+    <label for="" class="label_req">영세자영업자여부 (grntPrmeActnDvcdCont05Yn)</label>
     <div class="checks">
-      <input type="radio" id="crdtRcvrSprtYnY" name="crdtRcvrSprtYn" value="Y"><label for="crdtRcvrSprtYnY">예</label>
-      <input type="radio" id="crdtRcvrSprtYnN" name="crdtRcvrSprtYn" value="N" checked><label for="crdtRcvrSprtYnN">아니오</label>
-    </div>  
+      <input type="radio" id="grntPrmeActnDvcdCont05YnY" name="grntPrmeActnDvcdCont05Yn" value="Y"><label for="grntPrmeActnDvcdCont05YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont05YnN" name="grntPrmeActnDvcdCont05Yn" value="N" checked><label for="grntPrmeActnDvcdCont05YnN">아니오</label>
+    </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">사회적배려대상자여부 (soclCnsdCndtYn)</label>
+    <label for="" class="label_req">신용회복지원자여부 (grntPrmeActnDvcdCont06Yn)</label>
     <div class="checks">
-      <input type="radio" id="soclCnsdCndtYnY" name="soclCnsdCndtYn" value="Y"><label for="soclCnsdCndtYnY">예</label>
-      <input type="radio" id="soclCnsdCndtYnN" name="soclCnsdCndtYn" value="N" checked><label for="soclCnsdCndtYnN">아니오</label>
-    </div>  
+      <input type="radio" id="grntPrmeActnDvcdCont06YnY" name="grntPrmeActnDvcdCont06Yn" value="Y"><label for="grntPrmeActnDvcdCont06YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont06YnN" name="grntPrmeActnDvcdCont06Yn" value="N" checked><label for="grntPrmeActnDvcdCont06YnN">아니오</label>
+    </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">장애인가구여부 (dsblHhldYn)</label>
+    <label for="" class="label_req">사회적배려대상자여부 (grntPrmeActnDvcdCont07Yn)</label>
     <div class="checks">
-      <input type="radio" id="dsblHhldYnY" name="dsblHhldYn" value="Y"><label for="dsblHhldYnY">예</label>
-      <input type="radio" id="dsblHhldYnN" name="dsblHhldYn" value="N" checked><label for="dsblHhldYnN">아니오</label>
-    </div>  
+      <input type="radio" id="grntPrmeActnDvcdCont07YnY" name="grntPrmeActnDvcdCont07Yn" value="Y"><label for="grntPrmeActnDvcdCont07YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont07YnN" name="grntPrmeActnDvcdCont07Yn" value="N" checked><label for="grntPrmeActnDvcdCont07YnN">아니오</label>
+    </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">국가유공자가구여부 (ntonMrorHhldYn)</label>
+    <label for="" class="label_req">장애인여부 (grntPrmeActnDvcdCont08Yn)</label>
     <div class="checks">
-      <input type="radio" id="ntonMrorHhldYnY" name="ntonMrorHhldYn" value="Y"><label for="ntonMrorHhldYnY">예</label>
-      <input type="radio" id="ntonMrorHhldYnN" name="ntonMrorHhldYn" value="N" checked><label for="ntonMrorHhldYnN">아니오</label>
-    </div>  
+      <input type="radio" id="grntPrmeActnDvcdCont08YnY" name="grntPrmeActnDvcdCont08Yn" value="Y"><label for="grntPrmeActnDvcdCont08YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont08YnN" name="grntPrmeActnDvcdCont08Yn" value="N" checked><label for="grntPrmeActnDvcdCont08YnN">아니오</label>
+    </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">의사상자가구여부 (kwrcHhldYn)</label>
+    <label for="" class="label_req">국가유공자여부 (grntPrmeActnDvcdCont09Yn)</label>
     <div class="checks">
-      <input type="radio" id="kwrcHhldYnY" name="kwrcHhldYn" value="Y"><label for="kwrcHhldYnY">예</label>
-      <input type="radio" id="kwrcHhldYnN" name="kwrcHhldYn" value="N" checked><label for="kwrcHhldYnN">아니오</label>
-    </div>  
+      <input type="radio" id="grntPrmeActnDvcdCont09YnY" name="grntPrmeActnDvcdCont09Yn" value="Y"><label for="grntPrmeActnDvcdCont09YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont09YnN" name="grntPrmeActnDvcdCont09Yn" value="N" checked><label for="grntPrmeActnDvcdCont09YnN">아니오</label>
+    </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">다문화가정여부 (mlfmYn)</label>
+    <label for="" class="label_req">의사상자여부 (grntPrmeActnDvcdCont10Yn)</label>
     <div class="checks">
-      <input type="radio" id="mlfmYnY" name="mlfmYn" value="Y"><label for="mlfmYnY">예</label>
-      <input type="radio" id="mlfmYnN" name="mlfmYn" value="N" checked><label for="mlfmYnN">아니오</label>
-    </div>  
+      <input type="radio" id="grntPrmeActnDvcdCont10YnY" name="grntPrmeActnDvcdCont10Yn" value="Y"><label for="grntPrmeActnDvcdCont10YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont10YnN" name="grntPrmeActnDvcdCont10Yn" value="N" checked><label for="grntPrmeActnDvcdCont10YnN">아니오</label>
+    </div>
   </div>
 </div>
 
