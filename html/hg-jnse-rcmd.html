@@ -32,74 +32,74 @@ body {
 }
 
 .select {
-    padding: 0;
+  padding: 0;
 }
 .select input[type=radio]{
-    display: none;
+  display: none;
 }
 .select input[type=radio]+label{
-    display: inline-block;
-    cursor: pointer;
-    height: 24px;
-    width: 60px;
-    border: 1px solid #333;
-    line-height: 24px;
-    text-align: center;
-    font-weight:bold;
-    font-size:13px;
+  display: inline-block;
+  cursor: pointer;
+  height: 24px;
+  width: 60px;
+  border: 1px solid #333;
+  line-height: 24px;
+  text-align: center;
+  font-weight:bold;
+  font-size:13px;
 }
 .select input[type=radio]+label{
-    background-color: #fff;
-    color: #333;
+  background-color: #fff;
+  color: #333;
 }
 .select input[type=radio]:checked+label{
-    background-color: #333;
-    color: #fff;
+  background-color: #333;
+  color: #fff;
 }
 .checks {
-    position: relative;
-    height: 20px;
-    padding: 0;
-    line-height: 20px;
+  position: relative;
+  height: 20px;
+  padding: 0;
+  line-height: 20px;
 }
 .checks label {
-    font-weight:bold;
-    font-size:13px;
-    margin-right: 10px;
-    vertical-align: middle;
+  font-weight:bold;
+  font-size:13px;
+  margin-right: 10px;
+  vertical-align: middle;
 }            
 .checks input[type="radio"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 .checks input[type="radio"]+label {
-    display: inline-block;
-    position: relative;
-    padding-left: 25px;
-    cursor: pointer;
+  display: inline-block;
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
 }
 .checks input[type="radio"]+label:before {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 0px;
-    width: 14px;
-    height: 14px;
-    text-align: center;
-    background: #fff;
-    border: 1px solid #cacece;
-    border-radius: 100%;
-    box-shadow: none;
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 14px;
+  height: 14px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #cacece;
+  border-radius: 100%;
+  box-shadow: none;
 }
 .checks input[type="radio"]:checked+label:before {
-    background: #333;
-    border-color: #333;
+  background: #333;
+  border-color: #333;
 } 
 
 .title {
@@ -109,8 +109,8 @@ body {
   line-height: 24px;
 }
 .title:hover {
-    color: #2775c4;
-    text-decoration: underline;
+  color: #2775c4;
+  text-decoration: underline;
 }
 
 .publicDataDesc {
@@ -138,231 +138,337 @@ a {
 var dd;
 
 function getRadioButtonValue(varName) {
-	const radioButtons = document.querySelectorAll('input[name=' + varName +']');
-	let selectedValue;
-	for (const radioButton of radioButtons) {
-		if (radioButton.checked) {
-			selectedValue = radioButton.value;
-			break;
-		}
-	}
-	return selectedValue;
+  const radioButtons = document.querySelectorAll('input[name=' + varName +']');
+  let selectedValue;
+  for (const radioButton of radioButtons) {
+    if (radioButton.checked) {
+      selectedValue = radioButton.value;
+      break;
+    }
+  }
+  return selectedValue;
 }        
 
-function getList() {
-
-	var board1 = document.getElementById("board1");
-	board1.innerHTML = "";
-
-	/*
-hg-jnse-rcmd-response.json
-https://hion-dev.khfc.co.kr/cor/hg-jnse-rcmd-get.jsp
-https://openapi.hf.go.kr:10880/jnse-rcmd-info/jnse-rcmd-list?dataType=json&SG_APIM=0Yhb9NC0yOr0w2oZb0y_dq-VXWxMBWZ5T5Nj7XF7gDI&age=99&addr1=서울&weddStcd=1&rentGrntAmt=200000000&myIncmAmt=0&myTotDebtAmt=0
-	 */
-
-	fetch("http://bada.ai:8083/hf-api-proxy/jnse-rcmd-info"
-		+ "?dataType=json"
-
-		+ "&rentGrntAmt=" + rentGrntAmt.value.replaceAll(",", "")
-		+ "&addr1=" + encodeURIComponent(addr1.value)
-		+ "&addr2=" + encodeURIComponent(addr2.value)
-		+ "&age=" + age.value.replaceAll(",", "")
-		+ "&weddStcd=" + getRadioButtonValue("weddStcd")
-		+ "&myIncmAmt=" + myIncmAmt.value.replaceAll(",", "")
-		+ "&myTotDebtAmt=" + myTotDebtAmt.value.replaceAll(",", "")
-		+ "&ownHsCnt=" + ownHsCnt.value.replaceAll(",", "")
-
-		+ "&grntPrmeActnDvcdCont="
-		+ encodeURIComponent(
-			(getRadioButtonValue("grntPrmeActnDvcdCont01Yn") == "Y" ? "01|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont02Yn") == "Y" ? "02|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont03Yn") == "Y" ? "03|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont04Yn") == "Y" ? "04|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont05Yn") == "Y" ? "05|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont06Yn") == "Y" ? "06|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont07Yn") == "Y" ? "07|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont08Yn") == "Y" ? "08|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont09Yn") == "Y" ? "09|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont10Yn") == "Y" ? "10|" : "")
-		)
-	)
-		.then(r => r.json())
-		.then(d => {
-
-			dd = d;
-			var items = d.body.items;
-
-			var rcmdCmt = document.getElementById("rcmdCmt");
-			if(items.length == 0) {
-				rcmdCmt.innerHTML = "추천 보증상품이 없습니다.";
-			} else {
-				rcmdCmt.innerHTML = items.length + " 개의 보증상품을 추천합니다.";
-			}
-
-			items.forEach(element => {
-
-				var e = document.createElement('div');
-				$(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-96 bg-gray-50 [&>div]:my-2');
-				board1.append(e);
-
-				var e1 = document.createElement('p');
-				$(e1).addClass('text-2xl text-slate-800 my-5');
-				e1.innerHTML = element.prodNm;
-				e.append(e1);
-
-				var e20 = document.createElement('div');
-				e20.innerHTML = "추천순위: " + element.rcmdProrRnk;
-				e.append(e20);
-
-				var e21 = document.createElement('div');
-				e21.innerHTML = "보증구분코드: " + element.grntDvcd;
-				e.append(e21);
-
-				var e22 = document.createElement('div');
-				e22.innerHTML = "추천보증상품구분: " + element.rcmdGrntProdDvcd;
-				e.append(e22);
-
-				var e23 = document.createElement('div');
-				e23.innerHTML = "최대보증한도: " + $.number(element.grntLmtAmt);
-				e.append(e23);
-
-				var e24 = document.createElement('div');
-				e24.innerHTML = "최대대출한도: " + $.number(element.loanLmtAmt);
-				e.append(e24);
-
-				var e25 = document.createElement('div');
-				e25.innerHTML = "신청대상 요약: " + element.cont1.replaceAll("\n", "<br>");
-				e.append(e25);
-
-				var e26 = document.createElement('div');
-				e26.innerHTML = "문의처정보(JSON array): " + element.cont2;
-				e.append(e26);
-
-				var e27 = document.createElement('div');
-				var e271 = document.createElement('ul');
-				e271.className = "px-8 list-disc";
-				var lstCnct = JSON.parse(element.cont2);
-				lstCnct.forEach(function(cnct) {
-					var e2711 = document.createElement('li');
-					e2711.innerHTML = cnct.bnkNm + ' &#9742; ' + cnct.telNo;
-					e271.append(e2711);
-				});
-				e27.innerHTML = "문의처정보(목록)";
-				e27.append(e271);
-				e.append(e27);
-
-				var e28 = document.createElement('div');
-				e28.innerHTML = "링크: " + element.url;
-				e.append(e28);
-
-				var e29 = document.createElement('div');
-                                e29.innerHTML = "링크설명: " + element.cont3;
-                                e.append(e29);
-
-				var e2X = document.createElement('a');
-				e2X.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
-				e2X.innerHTML = element.cont3;
-				e2X.setAttribute("href", element.url);
-				e2X.setAttribute("target", "_black");
-				e.append(e2X);
-
-				var e2A = document.createElement('div');
-                                e2A.innerHTML = "보증한도 2억초과 여부: " + element.grntLmtHm2ExcsYn;
-                                e.append(e2A);
-
-				var e2B = document.createElement('div');
-                                e2B.innerHTML = "전월 보증부대출 적용금리: " + $.number(element.grntLmtHm2ExcsYn, 2);
-                                e.append(e2B);
-
-				var e2C = document.createElement('div');
-                                e2C.innerHTML = "최대이자지원: " + $.number(element.maxIntSprtRat, 2);
-                                e.append(e2C);
-
-				var e2D = document.createElement('div');
-                                e2D.innerHTML = "최저이자지원: " + $.number(element.minIntSprtRat, 2);
-                                e.append(e2D);
-
-				var e2E = document.createElement('div');
-                                e2E.innerHTML = "예상 보증료율: " + element.cont4;
-                                e.append(e2E);
-
-				var e2F = document.createElement('div');
-                                e2F.innerHTML = "우대내용: " + element.cont5;
-                                e.append(e2F);
-
-				var e2G = document.createElement('div');
-                                e2G.innerHTML = "취급은행: " + element.cont6;
-                                e.append(e2G);
-
-                                var e2H = document.createElement('div');
-                                var e2H1 = document.createElement('ul');
-                                e2H1.className = "px-8 list-disc";
-                                var lstBnk = element.cont6.split('|');
-                                lstBnk.forEach(function(bnkNm) {
-                                        var e2H11 = document.createElement('li');
-                                        e2H11.innerHTML = bnkNm;
-                                        e2H1.append(e2H11);
-                                });
-                                e2H.innerHTML = "취급은행(목록)";
-                                e2H.append(e2H1);
-                                e.append(e2H);
-			});
-		});
+function numberFormat(elementId) {
+  let element = document.getElementById(elementId);
+  element.addEventListener("input", function(event) {
+    element.value = element.value.replace(/[^0-9]/g, '');
+    element.value = numberWithCommas(element.value);
+  });
+}
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-	document.getElementById("button1").addEventListener("click", function() {
-		getList();
-	});
-	document.getElementById("input_area").addEventListener('keydown', (e) => {
-		if(e.key == "Enter") {
-			document.getElementById("button1").click(); 
-		}
-	});
+  document.getElementById("buttonLwdgCdPopup").addEventListener("click", function() {
+    openNewWindow("lwdg-cd-popup.html");
+  });
+  document.getElementById("button1").addEventListener("click", function() {
+    getList();
+  });
+  document.getElementById("input_area").addEventListener('keydown', (e) => {
+    if(e.key == "Enter") {
+      document.getElementById("button1").click();
+    }
+  });
 
-	numberFormat('rentGrntAmt');
-	numberFormat('age');
-	numberFormat('myIncmAmt');
-	numberFormat('myTotDebtAmt');
-	numberFormat('ownHsCnt');
+  numberFormat('rentGrntAmt');
+  numberFormat('age');
+  numberFormat('myIncmAmt');
+  numberFormat('myTotDebtAmt');
+  numberFormat('ownHsCnt');
 
-	document.getElementById("rentGrntAmt").focus();
+  getLwdgCdListList();
+
+  document.getElementById("rentGrntAmt").focus();
 });
 
-function numberFormat(elementId) {
-	let element = document.getElementById(elementId);
-	element.addEventListener("input", function(event) {
-		element.value = element.value.replace(/[^0-9]/g, '');
-		element.value = numberWithCommas(element.value);
-	});
-}
-function numberWithCommas(x) {
-	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+var lwdgCdMap;
+
+function getLwdgCdListList() {
+
+  fetch("json-data/lwdg-cd-list.json")
+    .then(r => r.json())
+    .then(d => {
+      lwdgCdMap = d;
+  });
 }
 
+var windowObjectReference = null;
+function openNewWindow(url) {
+  var name = '_blank';
+  var specs = 'menubar=no,status=no,toolbar=no,top=50,left=100,width=850,height=850';
+  if(windowObjectReference == null || windowObjectReference.closed) {
+    windowObjectReference = window.open(url, name, specs);
+  } else {
+    windowObjectReference.focus();
+  }
+}
+var gReturnValue = {};
+function getReturnValue(returnValue) {
+  gReturnValue = JSON.parse(returnValue);
+  trgtLwdgCd.value = gReturnValue.trgtLwdgCd;
+}
+
+function getList() {
+
+  var board1 = document.getElementById("board1");
+  board1.innerHTML = "";
+
+  getLoanRat();
+
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-rcmd-info"
+    + "?dataType=json"
+
+    + "&rentGrntAmt=" + rentGrntAmt.value.replaceAll(",", "")
+    + "&trgtLwdgCd=" + trgtLwdgCd.value 
+    + "&age=" + age.value.replaceAll(",", "")
+    + "&weddStcd=" + getRadioButtonValue("weddStcd")
+    + "&myIncmAmt=" + myIncmAmt.value.replaceAll(",", "")
+    + "&myTotDebtAmt=" + myTotDebtAmt.value.replaceAll(",", "")
+    + "&ownHsCnt=" + ownHsCnt.value.replaceAll(",", "")
+
+    + "&grntPrmeActnDvcdCont="
+    + encodeURIComponent(
+      (getRadioButtonValue("grntPrmeActnDvcdCont01Yn") == "Y" ? "01," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont02Yn") == "Y" ? "02," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont03Yn") == "Y" ? "03," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont04Yn") == "Y" ? "04," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont05Yn") == "Y" ? "05," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont06Yn") == "Y" ? "06," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont07Yn") == "Y" ? "07," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont08Yn") == "Y" ? "08," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont09Yn") == "Y" ? "09," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont10Yn") == "Y" ? "10," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont11Yn") == "Y" ? "11," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont12Yn") == "Y" ? "12," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont13Yn") == "Y" ? "13," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont14Yn") == "Y" ? "14," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont15Yn") == "Y" ? "15," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont16Yn") == "Y" ? "16," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont17Yn") == "Y" ? "17," : "")
+      + (getRadioButtonValue("grntPrmeActnDvcdCont18Yn") == "Y" ? "18," : "")
+    )
+  )
+    .then(r => r.json())
+    .then(d => {
+
+      dd = d;
+      var items = d.body.items;
+
+      var rcmdCmt = document.getElementById("rcmdCmt");
+      if(items.length == 0) {
+        rcmdCmt.innerHTML = "추천 보증상품이 없습니다.";
+      } else {
+        rcmdCmt.innerHTML = items.length + " 개의 보증상품을 추천합니다.";
+      }
+
+      items.forEach(element => {
+
+        var e = document.createElement('div');
+        $(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-96 bg-gray-50 [&>div]:my-2');
+        board1.append(e);
+
+        var e20 = document.createElement('div');
+        e20.innerHTML = "추천순위: " + element.rcmdProrRnk;
+        e.append(e20);
+
+        var e21 = document.createElement('div');
+        e21.innerHTML = "보증구분코드: " + element.grntDvcd;
+        e.append(e21);
+
+        var e23 = document.createElement('div');
+        e23.innerHTML = "최대보증한도(고객별): " + $.number(element.grntLmtAmt);
+        e.append(e23);
+
+        var e24 = document.createElement('div');
+        e24.innerHTML = "최대대출한도(고객별): " + $.number(element.loanLmtAmt);
+        e.append(e24);
+
+        getProdDtlInfo(e, element.grntDvcd);
+      });
+    });
+}
+
+var dd2;
+
+function getJnseMaxRentAmtList(e, pGrntDvcd) {
+
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-max-rent-amt-list"
+         + "?dataType=json"
+         + "&grntDvcd=" + pGrntDvcd
+       )
+    .then(r => r.json())
+    .then(d => {
+
+      dd2 = d;
+      var items = d.body.items;
+
+      var e2H = document.createElement('div');
+      var e2H1 = document.createElement('ul');
+      e2H1.className = "px-8 list-disc";
+      items.forEach(function(item) {
+        var e2H11 = document.createElement('li');
+        $(e2H11).addClass('text-sm');
+        e2H11.innerHTML = item.trgtLwdgCd + "(" + lwdgCdMap[item.trgtLwdgCd] + "): " + $.number(item.maxRentGrntAmt);
+        e2H1.append(e2H11);
+      });
+      e2H.innerHTML = "지역별 최대임차보증금액"
+      e2H.append(e2H1);
+      e.append(e2H);
+    });
+}
+
+var loanRatMap = {};
+
+function getLoanRat() {
+
+  let date = new Date();
+  date = new Date(date.setDate(1));
+  date = new Date(date.setMonth(date.getMonth() - 1));
+  let loanYm = ("" + date.getFullYear()) + ("" + date.getMonth()).padStart(2, '0');
+
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-grtd-loan-rat-list?loanYm=" + loanYm)
+    .then(r => r.json())
+    .then(d => {
+      loanRatList = d.body.items;
+      loanRatList.forEach(function(item) {
+        loanRatMap[item.grntDvcd] = item.grtdLoanAvgRat;
+      });
+  });
+}
+
+var dd3;
+
+function getProdDtlInfo(e, pGrntDvcd) {
+
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-prod-dtl-info"
+        + "?grntDvcd=" + pGrntDvcd
+       )
+    .then(r => r.json())
+    .then(d => {
+
+      dd3 = d;
+      var element = d.body.item;
+
+      var e1 = document.createElement('p');
+      $(e1).addClass('text-2xl text-slate-800 my-5');
+      e1.innerHTML = element.rcmdProdNm;
+      e.prepend(e1);
+
+      var e22 = document.createElement('div');
+      e22.innerHTML = "추천보증상품구분: " + element.rcmdGrntProdDvcd;
+      e.append(e22);
+
+      var e25 = document.createElement('div');
+      var e251 = document.createElement('ul');
+      e251.className = "px-8 list-disc";
+      var lstReqTrgt = element.reqTrgtCont.split('|');
+      lstReqTrgt.forEach(function(reqTrgt) {
+        var e2511 = document.createElement('li');
+        $(e2511).addClass('text-sm');
+        e2511.innerHTML = reqTrgt;
+        e251.append(e2511);
+      });
+      e25.innerHTML = "신청대상 요약:"
+      e25.append(e251);
+      e.append(e25);
+
+      var e26 = document.createElement('div');
+      e26.innerHTML = "문의처: " + element.qscNm;
+      e.append(e26);
+
+      var e27 = document.createElement('div');
+      e27.innerHTML = "문의처전화번호: " + element.qscTlno;
+      e.append(e27);
+
+      var e28 = document.createElement('div');
+      e28.innerHTML = "안내링크: ";
+      e.append(e28);
+
+      var e28X = document.createElement('a');
+      e28X.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
+      e28X.innerHTML = element.guidUrl;
+      e28X.setAttribute("href", element.guidUrl);
+      e28X.setAttribute("target", "_black");
+      e28.append(e28X);
+
+      var e2C = document.createElement('div');
+      e2C.innerHTML = "이자지원내용: " + element.intSprtCont;
+      e.append(e2C);
+
+      var e2E = document.createElement('div');
+      e2E.innerHTML = "예상 보증료율: " + element.exptGrfeRateCont;
+      e.append(e2E);
+
+      var e2F = document.createElement('div');
+      e2F.className = "cont";
+      e2F.innerHTML = "우대내용: " + element.grntPrmeCont;
+      e.append(e2F);
+
+      var e2H = document.createElement('div');
+      var e2H1 = document.createElement('ul');
+      e2H1.className = "px-8 list-disc";
+      var lstBnk = element.trtBankCont.split('|');
+      lstBnk.forEach(function(bnkNm) {
+        var e2H11 = document.createElement('li');
+        $(e2H11).addClass('text-sm');
+        e2H11.innerHTML = bnkNm;
+        e2H1.append(e2H11);
+      });
+      e2H.innerHTML = "취급은행:"
+      e2H.append(e2H1);
+      e.append(e2H);
+
+      var e2G = document.createElement('div');
+      e2G.innerHTML = "임차보증금액 대비 최대대출한도 비율: " + element.rentGrntMaxLoanLmtRate + "%";
+      e.append(e2G);
+
+      var e2J = document.createElement('div');
+      e2J.innerHTML = "최대대출한도: " + $.number(element.maxLoanLmtAmt);
+      e.append(e2J);
+
+      getJnseMaxRentAmtList(e, element.grntDvcd);
+
+      let loanRat = loanRatMap[element.grntDvcd];
+      if(loanRat != null) {
+        var e2B = document.createElement('div');
+        e2B.innerHTML = "전월 보증부대출 적용금리: " + $.number(loanRat, 2) + "%";
+        e.append(e2B);
+      }
+  });
+}
 
 </script>
 </head>
 <body id="body1" class="bg-gray-100">
 
 <div id="board0" class="text-center my-10 py-10 lg:text-left lg:m-10 lg:p-10">
-        <blockquote class="text-2xl font-bold italic text-slate-900">
-                HF 전세자금보증 추천 
-        </blockquote>
+  <blockquote class="text-2xl font-bold italic text-slate-900">
+    HF 전세자금보증 추천 
+  </blockquote>
 </div>
 
-<div class="m-4 p-8 bg-white rounded-lg flex flex-wrap flex-col lg:flex-row" id="input_area">
+<div class="m-4 p-8 bg-white rounded-lg flex flex-wrap flex-col lg:flex-row lg:[&>div]:m-4" id="input_area">
   <div class="preference">
     <label for="rentGrntAmt" class="label_req">임차보증금액 (rentGrntAmt)</label>
     <input type="text" id="rentGrntAmt" name="rentGrntAmt" maxlength="20" size="20" class="prc_textinput" style="text-align: end;">
   </div>
   <div class="preference">
-    <label for="addr1" class="label_req">목적물주소(광역시도) (addr1)</label>
-    <input type="text" id="addr1" name="addr1" maxlength="20" size="20" class="prc_textinput">
-  </div>
-  <div class="preference">
-    <label for="addr2" class="label_req">목적물주소(시군구) (addr2)</label>
-    <input type="text" id="addr2" name="addr2" maxlength="20" size="20" class="prc_textinput">
+    <label for="trgtLwdgCd" class="label_req">목적물주소 법정동코드 (trgtLwdgCd)</label>
+    <div>
+      <input type="text" id="trgtLwdgCd" name="trgtLwdgCd" maxlength="10" size="20" class="prc_textinput">
+        <button
+         type="button"
+         class="
+           w-12 py-1
+           bg-white border border-neutral-800
+           text-black text-sm font-medium"
+         id="buttonLwdgCdPopup">
+        <span>조회</span>
+      </button>
+    </div>
   </div>
   <div class="preference">
     <label for="age" class="label_req">만 나이 (age)</label>
@@ -378,11 +484,11 @@ function numberWithCommas(x) {
     </div>
   </div>
   <div class="preference">
-    <label for="myIncmAmt" class="label_req">본인 연소득 (myIncmAmt)</label>
+    <label for="myIncmAmt" class="label_req">연소득금액 (myIncmAmt)</label>
     <input type="text" id="myIncmAmt" name="myIncmAmt" minlength="4" maxlength="16" size="20" class="prc_textinput" style="text-align: end;">
   </div>
   <div class="preference">
-    <label for="myTotDebtAmt" class="label_req">본인 부채 (myTotDebtAmt)</label>
+    <label for="myTotDebtAmt" class="label_req">총부채금액 (myTotDebtAmt)</label>
     <input type="text" id="myTotDebtAmt" name="myTotDebtAmt" minlength="4" maxlength="16" size="20" class="prc_textinput" style="text-align: end;">
   </div>
  <div class="preference">
@@ -390,89 +496,143 @@ function numberWithCommas(x) {
     <input type="text" id="ownHsCnt" name="ownHsCnt" maxlength="3" size="20" class="prc_textinput" style="text-align: end;">
   </div>
  <div class="preference">
-    <label for="" class="label_req">2자녀이상여부 (grntPrmeActnDvcdCont01Yn)</label>
+    <label for="" class="label_req">2자녀이상 (grntPrmeActnDvcdCont01Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont01YnY" name="grntPrmeActnDvcdCont01Yn" value="Y"><label for="grntPrmeActnDvcdCont01YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont01YnN" name="grntPrmeActnDvcdCont01Yn" value="N" checked><label for="grntPrmeActnDvcdCont01YnN">아니오</label>
     </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">다문화가정여부 (grntPrmeActnDvcdCont02Yn)</label>
+    <label for="" class="label_req">다문화가정 (grntPrmeActnDvcdCont02Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont02YnY" name="grntPrmeActnDvcdCont02Yn" value="Y"><label for="grntPrmeActnDvcdCont02YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont02YnN" name="grntPrmeActnDvcdCont02Yn" value="N" checked><label for="grntPrmeActnDvcdCont02YnN">아니오</label>
     </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">한부모가구여부 (grntPrmeActnDvcdCont03Yn)</label>
+    <label for="" class="label_req">한부모가구 (grntPrmeActnDvcdCont03Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont03YnY" name="grntPrmeActnDvcdCont03Yn" value="Y"><label for="grntPrmeActnDvcdCont03YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont03YnN" name="grntPrmeActnDvcdCont03Yn" value="N" checked><label for="grntPrmeActnDvcdCont03YnN">아니오</label>
     </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">정책서민금융이용자여부 (grntPrmeActnDvcdCont04Yn)</label>
+    <label for="" class="label_req">장애인(grntPrmeActnDvcdCont04Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont04YnY" name="grntPrmeActnDvcdCont04Yn" value="Y"><label for="grntPrmeActnDvcdCont04YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont04YnN" name="grntPrmeActnDvcdCont04Yn" value="N" checked><label for="grntPrmeActnDvcdCont04YnN">아니오</label>
     </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">영세자영업자여부 (grntPrmeActnDvcdCont05Yn)</label>
+    <label for="" class="label_req">국가유공자 (grntPrmeActnDvcdCont05Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont05YnY" name="grntPrmeActnDvcdCont05Yn" value="Y"><label for="grntPrmeActnDvcdCont05YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont05YnN" name="grntPrmeActnDvcdCont05Yn" value="N" checked><label for="grntPrmeActnDvcdCont05YnN">아니오</label>
     </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">신용회복지원자여부 (grntPrmeActnDvcdCont06Yn)</label>
+    <label for="" class="label_req">의사상자 (grntPrmeActnDvcdCont06Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont06YnY" name="grntPrmeActnDvcdCont06Yn" value="Y"><label for="grntPrmeActnDvcdCont06YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont06YnN" name="grntPrmeActnDvcdCont06Yn" value="N" checked><label for="grntPrmeActnDvcdCont06YnN">아니오</label>
     </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">사회적배려대상자여부 (grntPrmeActnDvcdCont07Yn)</label>
+    <label for="" class="label_req">신용회복지원자(grntPrmeActnDvcdCont07Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont07YnY" name="grntPrmeActnDvcdCont07Yn" value="Y"><label for="grntPrmeActnDvcdCont07YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont07YnN" name="grntPrmeActnDvcdCont07Yn" value="N" checked><label for="grntPrmeActnDvcdCont07YnN">아니오</label>
     </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">장애인여부 (grntPrmeActnDvcdCont08Yn)</label>
+    <label for="" class="label_req">사회적배려대상자(grntPrmeActnDvcdCont08Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont08YnY" name="grntPrmeActnDvcdCont08Yn" value="Y"><label for="grntPrmeActnDvcdCont08YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont08YnN" name="grntPrmeActnDvcdCont08Yn" value="N" checked><label for="grntPrmeActnDvcdCont08YnN">아니오</label>
     </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">국가유공자여부 (grntPrmeActnDvcdCont09Yn)</label>
+    <label for="" class="label_req">정책서민금융 이용자(grntPrmeActnDvcdCont09Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont09YnY" name="grntPrmeActnDvcdCont09Yn" value="Y"><label for="grntPrmeActnDvcdCont09YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont09YnN" name="grntPrmeActnDvcdCont09Yn" value="N" checked><label for="grntPrmeActnDvcdCont09YnN">아니오</label>
     </div>
   </div>
   <div class="preference">
-    <label for="" class="label_req">의사상자여부 (grntPrmeActnDvcdCont10Yn)</label>
+    <label for="" class="label_req">영세자영업자(grntPrmeActnDvcdCont10Yn)</label>
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont10YnY" name="grntPrmeActnDvcdCont10Yn" value="Y"><label for="grntPrmeActnDvcdCont10YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont10YnN" name="grntPrmeActnDvcdCont10Yn" value="N" checked><label for="grntPrmeActnDvcdCont10YnN">아니오</label>
     </div>
   </div>
+  <div class="preference">
+    <label for="" class="label_req">임대주택 입주자(grntPrmeActnDvcdCont11Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont11YnY" name="grntPrmeActnDvcdCont11Yn" value="Y"><label for="grntPrmeActnDvcdCont11YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont11YnN" name="grntPrmeActnDvcdCont11Yn" value="N" checked><label for="grntPrmeActnDvcdCont11YnN">아니오</label>
+    </div>
+  </div>
+  <div class="preference">
+    <label for="" class="label_req">분할상환 예정자(grntPrmeActnDvcdCont12Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont12YnY" name="grntPrmeActnDvcdCont12Yn" value="Y"><label for="grntPrmeActnDvcdCont12YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont12YnN" name="grntPrmeActnDvcdCont12Yn" value="N" checked><label for="grntPrmeActnDvcdCont12YnN">아니오</label>
+    </div>
+  </div>
+  <div class="preference">
+    <label for="" class="label_req">주택도시기금 전세대출 기존 이용자(grntPrmeActnDvcdCont13Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont13YnY" name="grntPrmeActnDvcdCont13Yn" value="Y"><label for="grntPrmeActnDvcdCont13YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont13YnN" name="grntPrmeActnDvcdCont13Yn" value="N" checked><label for="grntPrmeActnDvcdCont13YnN">아니오</label>
+    </div>
+  </div>
+  <div class="preference">
+    <label for="" class="label_req">제2금융권 전세대출 기존 이용자(grntPrmeActnDvcdCont14Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont14YnY" name="grntPrmeActnDvcdCont14Yn" value="Y"><label for="grntPrmeActnDvcdCont14YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont14YnN" name="grntPrmeActnDvcdCont14Yn" value="N" checked><label for="grntPrmeActnDvcdCont14YnN">아니오</label>
+    </div>
+  </div>
+  <div class="preference">
+    <label for="" class="label_req">서울시 갱신만료 임차인(grntPrmeActnDvcdCont15Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont15YnY" name="grntPrmeActnDvcdCont15Yn" value="Y"><label for="grntPrmeActnDvcdCont15YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont15YnN" name="grntPrmeActnDvcdCont15Yn" value="N" checked><label for="grntPrmeActnDvcdCont15YnN">아니오</label>
+    </div>
+  </div>
+  <div class="preference">
+    <label for="" class="label_req">부산시 공공임대주택(럭키7하우스) 임차인(grntPrmeActnDvcdCont16Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont16YnY" name="grntPrmeActnDvcdCont16Yn" value="Y"><label for="grntPrmeActnDvcdCont16YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont16YnN" name="grntPrmeActnDvcdCont16Yn" value="N" checked><label for="grntPrmeActnDvcdCont16YnN">아니오</label>
+    </div>
+  </div>
+  <div class="preference">
+    <label for="" class="label_req">고정금리 전세대출 신청자(grntPrmeActnDvcdCont17Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont17YnY" name="grntPrmeActnDvcdCont17Yn" value="Y"><label for="grntPrmeActnDvcdCont17YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont17YnN" name="grntPrmeActnDvcdCont17Yn" value="N" checked><label for="grntPrmeActnDvcdCont17YnN">아니오</label>
+    </div>
+  </div>
+  <div class="preference">
+    <label for="" class="label_req">전세사기피해자 등(grntPrmeActnDvcdCont18Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont18YnY" name="grntPrmeActnDvcdCont18Yn" value="Y"><label for="grntPrmeActnDvcdCont18YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont18YnN" name="grntPrmeActnDvcdCont18Yn" value="N" checked><label for="grntPrmeActnDvcdCont18YnN">아니오</label>
+    </div>
+  </div>
 </div>
 
 <div class="mx-8 lg:mx-20 my-8">
-	<button
+  <button
      type="button"
-     data-mdb-ripple="true"
-     data-mdb-ripple-color="light"
      class="
      w-full lg:w-36 py-3
      rounded-lg bg-red-700
      text-white text-xl font-semibold shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
      id="button1">
-		<span>조회</span>
-	</button>
+    <span>조회</span>
+  </button>
 </div>
 
 <div id="board1" class="lg:flex lg:flex-wrap lg:m-1">
