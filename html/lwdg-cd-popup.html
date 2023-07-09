@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>광역시도, 시군구 선택</title>
+
+<style>
+html {
+}
+body {
+  font-family: NanumGothic, 'Malgun Gothic', '맑은 고딕', Dotum, '돋움', sans-serif;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- tailwindcss -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+
+  $("#board3").hide();
+
+  getLwdgCdList();
+  
+  $('#buttonSel').click(function() {
+    window.opener.getReturnValue(JSON.stringify(gReturnValue));
+    window.close();
+  });
+});
+
+var dd;
+var lwdgCdMap;
+var areaKeys = [];
+var gReturnValue = {};
+
+function getLwdgCdList() {
+
+  fetch("json-data/lwdg-cd-list.json")
+    .then(r => r.json())
+    .then(d => {
+      lwdgCdMap = d;
+
+      Object.keys(lwdgCdMap).forEach(function(key) {
+	if(key.substring(2) == '00000000' || key == '3611000000') {
+          areaKeys.push(key); 
+	}
+      })
+      areaKeys.sort(function(a, b) {return lwdgCdMap[a] > lwdgCdMap[b] ? 1 : -1});
+
+      areaKeys.forEach((areaKey, i) => {
+        var e = document.createElement('div');
+        $(e).addClass('p-2 shadow-lg m-1 bg-gray-50');
+        $(e).addClass('text-base text-slate-800');
+        e.innerHTML = lwdgCdMap[areaKey];
+        e.setAttribute('lwdgCd', areaKey); 
+        e.addEventListener("click", function() {
+	  $(this).parent().children().removeClass('bg-yellow-300').addClass('bg-gray-50');
+          $(this).addClass('bg-yellow-300'); 
+          setLwdgCd(areaKey);
+	  getSgguList(areaKey);
+        });
+        board1.append(e);
+      });
+  });
+}
+
+var sgguKeys = [];
+
+function getSgguList(areaKey) {
+  board2.innerHTML = "";
+  sgguKeys = [];
+  Object.keys(lwdgCdMap).forEach(function(key) {
+    if(key.startsWith(areaKey.substring(0, 2)) && key != areaKey && key.substring(5) == '00000') {
+      sgguKeys.push(key);
+      sgguKeys.sort(function(a, b) {return lwdgCdMap[a] > lwdgCdMap[b] ? 1 : -1});
+    }
+  })
+
+  sgguKeys.forEach((sgguKey, i) => {
+    var e = document.createElement('div');
+    $(e).addClass('p-2 shadow-lg m-1 bg-gray-50');
+    $(e).addClass('text-base text-slate-800');
+    e.innerHTML = lwdgCdMap[sgguKey].split(' ')[1];
+    e.setAttribute('lwdgCd', sgguKey);
+    e.addEventListener("click", function() {
+      $(this).parent().children().removeClass('bg-yellow-300').addClass('bg-gray-50');
+      $(this).addClass('bg-yellow-300');
+      setLwdgCd(sgguKey); 
+    });
+    board2.append(e);
+  });
+}
+
+function setLwdgCd(lwdgCd) {
+  $("#board3").show(); 
+  gReturnValue.trgtLwdgCd = lwdgCd;
+  $("#lwdgCdSel").html(lwdgCd);
+  $("#lwdgNmSel").html(lwdgCdMap[lwdgCd]);
+}
+
+</script>
+</head>
+
+<body id="body1" class="bg-gray-100">
+
+<div id="board0" class="text-center my-10 mx-5 py-10 lg:text-left lg:m-10 lg:p-10">
+  <blockquote class="text-2xl font-bold italic text-slate-900">
+    광역시도, 시군구 선택 
+  </blockquote>
+</div>
+
+<div id="board1" class="m-2 p-2 flex flex-row flex-wrap">
+</div>
+
+<div id="board2" class="m-2 p-2 flex flex-row flex-wrap">
+</div>
+
+<div id="board3" class="m-2 p-2 flex flex-row flex-wrap">
+  <div id="lwdgCdSel" class="m-2">
+  </div>
+  <div id="lwdgNmSel" class="m-2">
+  </div>
+  <button
+    type="button"
+    class="
+           w-12 py-1 m-2
+           bg-white border border-neutral-800
+           text-black text-sm font-medium"
+    id="buttonSel">
+    <span>선택</span>
+  </button>
+</div>
+
+<footer class="text-center lg:text-left bg-gray-100 text-gray-600">
+  <div class="text-center p-6 bg-gray-200">
+    <span>© 2024 copyright:</span>
+    <a class="text-gray-600 font-semibold" href="http://bada.ai">bada.ai</a>
+  </div>
+</footer>
+
+</body>
+</html>
