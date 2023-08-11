@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전세자금보증 상품정보 입력</title>
+
+<style>
+html {
+}
+body {
+  font-family: NanumGothic, 'Malgun Gothic', '맑은 고딕', Dotum, '돋움', sans-serif;
+}
+.preference {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
+@media only screen and (min-width: 992px) {
+  .preference {
+    width: 280px;
+  }
+}
+.label_req{font-size:15px;line-height:25px;}
+.prc_textinput{border-radius:1px;border:1px solid #d9d9d9;border-top:1px solid #c0c0c0;font-size:17px;height:37px;padding:1px 8px;width:160px;}
+@media only screen and (min-width: 992px) {
+  .prc_textinput{width:160px;}
+}
+.prc_textinput:focus{box-shadow:inset 0 1px 2px rgba(0,0,0,.3);border:1px solid #4d90fe;outline:none}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/df-number-format/2.1.6/jquery.number.min.js"></script>
+
+<!-- tailwindcss -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+  document.getElementById("button1").addEventListener("click", function() {
+    getList();
+  });
+  document.getElementById("button2").addEventListener("click", function() {
+    postList();
+  });
+});
+
+var dd;
+var sendProdInfo;
+
+function getList() {
+  var board1 = document.getElementById("board1");
+  board1.innerHTML = ""
+
+  fetch("json-data/lwdg-cd-list.json")
+    .then(r => r.json())
+    .then(d => {
+      lwdgCdMap = d;
+  });
+
+  fetch("json-data/bank-nm-list.json")
+    .then(r => r.json())
+    .then(d => {
+      bankNmMap = d;
+  });
+
+  fetch("json-data/bank-ctc-list.json")
+    .then(r => r.json())
+    .then(d => {
+      bankCtcMap = d;
+  });
+
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-prod-dtl-info"
+        + "?grntDvcd=" + grntDvcd.value 
+       )
+    .then(r => r.json())
+    .then(d => {
+      dd = d;
+      var item = d.body.item;
+      sendProdInfo = {};
+      sendProdInfo.grntDvcd = item.grntDvcd;
+      sendProdInfo.rcmdGrntProdDvcd = item.rcmdGrntProdDvcd;
+      sendProdInfo.rcmdProdNm = item.rcmdProdNm;
+      sendProdInfo.reqTrgtCont = [];
+      sendProdInfo.grntReqTrgtDvcd = item.grntReqTrgtDvcd;
+      sendProdInfo.qscCont = [];
+      sendProdInfo.guidUrl = item.guidUrl;
+      sendProdInfo.intSprtCont = item.intSprtCont;
+      sendProdInfo.exptGrfeRateCont = item.exptGrfeRateCont;
+      sendProdInfo.grntPrmeCont = item.grntPrmeCont;
+      sendProdInfo.trtBankCont = [];
+      sendProdInfo.rentGrntAmtBasisCont = [];
+
+      var e = document.createElement('div');
+      $(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-[400px] bg-gray-50 [&>div]:my-2');
+      board1.append(e);
+
+      var e1 = document.createElement('p');
+      $(e1).addClass('text-2xl text-slate-800 my-5');
+      e1.innerHTML = 'HF';
+      e.append(e1);
+
+      if(item.grntDvcd == "") {
+        var eN1 = document.createElement('div');
+        eN1.innerHTML = "상품정보 없음";
+        e.append(eN1);
+
+      } else {
+        var e10 = document.createElement('div');
+        e10.innerHTML = "보증구분코드: " + item.grntDvcd;
+        e.append(e10);
+  
+        var e1A = document.createElement('div');
+        e1A.innerHTML = "추천상품명: " + item.rcmdProdNm;
+        e.append(e1A);
+  
+        var e11 = document.createElement('div');
+        e11.innerHTML = "추천보증상품구분: " + item.rcmdGrntProdDvcd;
+        e.append(e11);
+  
+        var e12 = document.createElement('div');
+        var e121 = document.createElement('ul');
+        e121.className = "px-8 list-disc";
+        var lstReqTrgt= item.reqTrgtCont.split('|');
+        lstReqTrgt.forEach(function(reqTrgt) {
+          var e1211 = document.createElement('li');
+          $(e1211).addClass('text-sm');
+          e1211.innerHTML = reqTrgt;
+          e121.append(e1211);
+          sendProdInfo.reqTrgtCont.push(reqTrgt);
+        });
+        e12.innerHTML = "신청대상 요약";
+        e12.append(e121);
+        e.append(e12);
+  
+        var e13 = document.createElement('div');
+        e13.innerHTML = "신청대상구분: " + item.grntReqTrgtDvcd;
+        e.append(e13);
+  
+        var e14 = document.createElement('div');
+        e14.innerHTML = "문의처명: " + item.qscNm;
+        e.append(e14);
+  
+        var e15 = document.createElement('div');
+        e15.innerHTML = "문의처전화번호: " + item.qscTlno;
+        e.append(e15);
+  
+        var qscObj = {}
+        qscObj.qscNm = item.qscNm;
+        qscObj.qscTlno = item.qscTlno;
+        if(qscObj.qscNm != "") {
+          sendProdInfo.qscCont.push(qscObj);
+        }
+  
+        var e16 = document.createElement('div');
+        e16.innerHTML = "안내링크: ";
+        e.append(e16);
+  
+        var e16X = document.createElement('a');
+        e16X.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
+        e16X.innerHTML = item.guidUrl;
+        e16X.setAttribute("href", item.guidUrl);
+        e16X.setAttribute("target", "_black");
+        e16.append(e16X);
+  
+        var e17 = document.createElement('div');
+        e17.innerHTML = "이자지원내용: " + item.intSprtCont;
+        e.append(e17);
+  
+        var e18 = document.createElement('div');
+        e18.innerHTML = "예상보증료율: " + item.exptGrfeRateCont;
+        e.append(e18);
+  
+        var e19 = document.createElement('div');
+        e19.innerHTML = "우대내용: " + item.grntPrmeCont;
+        e.append(e19);
+  
+        var e20 = document.createElement('div');
+        var e201 = document.createElement('ul');
+        e201.className = "px-8 list-disc";
+        var lstTrtBank = item.trtBankCont.split('|');
+        lstTrtBank.forEach(function(trtBank) {
+          var trtBankItem = {}
+          trtBankItem["finOrgCd"] = trtBank;
+          trtBankItem["finOrgTlno"] = bankCtcMap[trtBank];
+
+          var e2011 = document.createElement('li');
+          $(e2011).addClass('text-sm');
+          e2011.innerHTML = trtBank + " " + bankNmMap[trtBank] + " " + bankCtcMap[trtBank];
+          e201.append(e2011);
+
+          sendProdInfo.trtBankCont.push(trtBankItem);
+        });
+        e20.innerHTML = "취급은행";
+        e20.append(e201);
+        e.append(e20);
+  
+        var e21 = document.createElement('div');
+        e21.innerHTML = "임차보증금액 대비 최대대출한도비율(%): " + item.rentGrntMaxLoanLmtRate;
+        e.append(e21);
+        sendProdInfo.rentGrntMaxLoanLmtRate = Number(item.rentGrntMaxLoanLmtRate);
+  
+        var e22 = document.createElement('div');
+        e22.innerHTML = "최대대출한도금액: " + $.number(item.maxLoanLmtAmt);
+        e.append(e22);
+        sendProdInfo.maxLoanLmtAmt = Number(item.maxLoanLmtAmt);
+  
+        getList2(e);
+      }
+
+      getListNF();
+    })
+}
+
+var dd2;
+var lwdgCdMap;
+var bankNmMap;
+var bankCtcMap;
+
+function getList2(e) {
+
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-max-rent-amt-list"
+         + "?grntDvcd=" + grntDvcd.value 
+       )
+    .then(r => r.json())
+    .then(d => {
+      dd2 = d;
+      var items = d.body.items;
+
+      var e20 = document.createElement('div');
+      var e201 = document.createElement('ul');
+      e201.className = "px-8 list-disc";
+      items.forEach(function(item) {
+        var e2011 = document.createElement('li');
+        $(e2011).addClass('text-sm');
+        e2011.innerHTML = item.trgtLwdgCd + '(' + lwdgCdMap[item.trgtLwdgCd] + '): ' + $.number(item.maxRentGrntAmt);
+        e201.append(e2011);
+
+        var rentBasisObj = {};
+        rentBasisObj.rgnCd = item.trgtLwdgCd;
+        rentBasisObj.amt = Number(item.maxRentGrntAmt);
+        sendProdInfo.rentGrntAmtBasisCont.push(rentBasisObj);
+      });
+      e20.innerHTML = "지역별 최대임차보증금액";
+      e20.append(e201);
+      e.append(e20);
+    });
+}
+
+function postList() {
+
+  var e = document.createElement('div');
+  $(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-[700px] bg-gray-50');
+  board1.append(e);
+
+  var e10 = document.createElement('pre');
+  $(e10).addClass('text-xs');
+  e10.innerHTML = JSON.stringify(sendProdInfo, null, 2);
+  e.append(e10);
+
+  fetch("http://bada.ai:8090/put-product", {
+    method: "PUT",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(sendProdInfo)
+  })
+  .then(r => r.json())
+  .then(d => {
+    alert(JSON.stringify(d));
+  });
+}
+
+var ddnn;
+
+function getListNF() {
+
+  var board1 = document.getElementById("board1");
+
+  fetch("http://bada.ai:8090/get-product" + "?productCode=" + grntDvcd.value, {
+    method: "GET",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(r => r.json())
+    .then(d => {
+      ddnn = d;
+      item = d;
+
+      var e = document.createElement('div');
+      $(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-[400px] bg-gray-50 [&>div]:my-2');
+      board1.append(e);
+
+      var e1 = document.createElement('p');
+      $(e1).addClass('text-2xl text-slate-800 my-5');
+      e1.innerHTML = 'NF';
+      e.append(e1);
+
+      var e10 = document.createElement('div');
+      e10.innerHTML = "보증구분코드: " + item.grntDvcd;
+      e.append(e10);
+
+      var e1A = document.createElement('div');
+      e1A.innerHTML = "추천상품명: " + item.rcmdProdNm;
+      e.append(e1A);
+
+      var e11 = document.createElement('div');
+      e11.innerHTML = "추천보증상품구분: " + item.rcmdGrntProdDvcd;
+      e.append(e11);
+
+      var e12 = document.createElement('div');
+      var e121 = document.createElement('ul');
+      e121.className = "px-8 list-disc";
+      var lstReqTrgt= item.reqTrgtCont;
+      lstReqTrgt.forEach(function(reqTrgt) {
+        var e1211 = document.createElement('li');
+        $(e1211).addClass('text-sm');
+        e1211.innerHTML = reqTrgt;
+        e121.append(e1211);
+      });
+      e12.innerHTML = "신청대상 요약";
+      e12.append(e121);
+      e.append(e12);
+
+      var e13 = document.createElement('div');
+      e13.innerHTML = "신청대상구분: " + item.grntReqTrgtDvcd;
+      e.append(e13);
+
+      var e14 = document.createElement('div');
+      var e141 = document.createElement('ul');
+      e141.className = "px-8 list-disc";
+      var lstQsc= item.qscCont;
+      lstQsc.forEach(function(qsc) {
+        var e1411 = document.createElement('li');
+        $(e1411).addClass('text-sm');
+        e1411.innerHTML = qsc.qscNm + ": " + qsc.qscTlno;
+        e141.append(e1411);
+      });
+      e14.innerHTML = "문의처";
+      e14.append(e141);
+      e.append(e14);
+
+      var e16 = document.createElement('div');
+      e16.innerHTML = "안내링크: ";
+      e.append(e16);
+
+      var e16X = document.createElement('a');
+      e16X.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
+      e16X.innerHTML = item.guidUrl;
+      e16X.setAttribute("href", item.guidUrl);
+      e16X.setAttribute("target", "_black");
+      e16.append(e16X);
+
+      var e17 = document.createElement('div');
+      e17.innerHTML = "이자지원내용: " + item.intSprtCont;
+      e.append(e17);
+
+      var e18 = document.createElement('div');
+      e18.innerHTML = "예상보증료율: " + item.exptGrfeRateCont;
+      e.append(e18);
+
+      var e19 = document.createElement('div');
+      e19.innerHTML = "우대내용: " + item.grntPrmeCont;
+      e.append(e19);
+
+      var e20 = document.createElement('div');
+      var e201 = document.createElement('ul');
+      e201.className = "px-8 list-disc";
+      var lstTrtBank = item.trtBankCont;
+      lstTrtBank.forEach(function(trtBank) {
+        var e2011 = document.createElement('li');
+        $(e2011).addClass('text-sm');
+        e2011.innerHTML = trtBank.finOrgCd + " " + bankNmMap[trtBank.finOrgCd] + " " + trtBank.finOrgTlno;
+        e201.append(e2011);
+      });
+
+      e20.innerHTML = "취급은행";
+      e20.append(e201);
+      e.append(e20);
+
+      var e21 = document.createElement('div');
+      e21.innerHTML = "임차보증금액 대비 최대대출한도비율(%): " + item.rentGrntMaxLoanLmtRate;
+      e.append(e21);
+
+      var e22 = document.createElement('div');
+      e22.innerHTML = "최대대출한도금액: " + $.number(item.maxLoanLmtAmt);
+      e.append(e22);
+
+      var e23 = document.createElement('div');
+      var e231 = document.createElement('ul');
+      e231.className = "px-8 list-disc";
+      item.rentGrntAmtBasisCont.forEach(function(rgn) {
+        var e2311 = document.createElement('li');
+        $(e2311).addClass('text-sm');
+        e2311.innerHTML = rgn.rgnCd + '(' + lwdgCdMap[rgn.rgnCd] + '): ' + $.number(rgn.amt);
+        e231.append(e2311);
+      });
+      e23.innerHTML = "지역별 최대임차보증금액";
+      e23.append(e231);
+      e.append(e23);
+  })
+}
+
+</script>
+
+
+
+
+</head>
+<body id="body1" class="bg-gray-100">
+
+<div id="board0" class="text-center my-10 mx-5 py-10 lg:text-left lg:m-10 lg:p-10">
+  <blockquote class="text-2xl font-bold italic text-slate-900">
+    전세자금보증상품 상품정보 입력 (HF -> NF)
+  </blockquote>
+</div>
+
+<div class="m-4 p-8 bg-white rounded-lg flex flex-col lg:flex-row items-end" id="input_area">
+  <div class="preference">
+    <label for="grntDvcd" class="label_req">보증구분코드 (grntDvcd)</label>
+    <input type="text" id="grntDvcd" name="grntDvcd" maxlength="2" size="4" class="prc_textinput">
+  </div>
+</div>
+
+<div class="flex flex-col lg:flex-row my-4">
+  <div class="mx-8 lg:mx-20 my-4">
+    <button 
+      type="button"
+      data-mdb-ripple="true"
+      data-mdb-ripple-color="light"
+      class="
+      w-full lg:w-36 py-3 
+      rounded-lg bg-red-700 
+      text-white text-xl font-semibold shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" id="button1">
+      <span>조회</span>
+    </button>
+  </div>
+  
+  <div class="mx-8 lg:mx-20 my-4">
+    <button
+      type="button"
+      data-mdb-ripple="true"
+      data-mdb-ripple-color="light"
+      class="
+      w-full lg:w-36 py-3
+      rounded-lg bg-green-700
+      text-white text-xl font-semibold shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out" id="button2">
+      <span>Put to NF</span>
+    </button>
+  </div>
+</div>
+
+<div id="board1" class="lg:flex lg:flex-wrap lg:m-1">
+</div>
+
+<footer class="text-center lg:text-left bg-gray-100 text-gray-600">
+  <div class="text-center p-6 bg-gray-200">
+    <span>© 2023 copyright:</span>
+    <a class="text-gray-600 font-semibold" href="https://www.hf.go.kr/">Korea Housing Finance Corporation</a>
+  </div>
+</footer>
+
+</body>
+</html>

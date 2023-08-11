@@ -179,19 +179,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
   numberFormat('myTotDebtAmt');
   numberFormat('ownHsCnt');
 
-  getLwdgCdListList();
+  getJsonData();
 
   document.getElementById("rentGrntAmt").focus();
 });
 
 var lwdgCdMap;
+var bankNmMap;
+var bankCtcMap;
 
-function getLwdgCdListList() {
+function getJsonData() {
 
   fetch("json-data/lwdg-cd-list.json")
     .then(r => r.json())
     .then(d => {
       lwdgCdMap = d;
+  });
+
+  fetch("json-data/bank-nm-list.json")
+    .then(r => r.json())
+    .then(d => {
+      bankNmMap = d;
+  });
+
+  fetch("json-data/bank-ctc-list.json")
+    .then(r => r.json())
+    .then(d => {
+      bankCtcMap = d;
   });
 }
 
@@ -279,11 +293,11 @@ function getList() {
         e.append(e21);
 
         var e23 = document.createElement('div');
-        e23.innerHTML = "최대보증한도(고객별): " + $.number(element.grntLmtAmt);
+        e23.innerHTML = "최대보증한도(고객별): " + $.number(element.grntLmtAmt) + "원";
         e.append(e23);
 
         var e24 = document.createElement('div');
-        e24.innerHTML = "최대대출한도(고객별): " + $.number(element.loanLmtAmt);
+        e24.innerHTML = "최대대출한도(고객별): " + $.number(element.loanLmtAmt) + "원";
         e.append(e24);
 
         getProdDtlInfo(e, element.grntDvcd);
@@ -311,7 +325,7 @@ function getJnseMaxRentAmtList(e, pGrntDvcd) {
       items.forEach(function(item) {
         var e2H11 = document.createElement('li');
         $(e2H11).addClass('text-sm');
-        e2H11.innerHTML = item.trgtLwdgCd + "(" + lwdgCdMap[item.trgtLwdgCd] + "): " + $.number(item.maxRentGrntAmt);
+        e2H11.innerHTML = lwdgCdMap[item.trgtLwdgCd] + ": " + $.number(item.maxRentGrntAmt) + "원";
         e2H1.append(e2H11);
       });
       e2H.innerHTML = "지역별 최대임차보증금액"
@@ -334,8 +348,8 @@ function getLoanRat() {
     .then(d => {
       loanRatList = d.body.items;
       loanRatList.forEach(function(item) {
-        loanRatMap[item.grntDvcd] = item.grtdLoanAvgRat;
-      });
+      loanRatMap[item.grntDvcd] = item.grtdLoanAvgRat;
+    });
   });
 }
 
@@ -380,8 +394,15 @@ function getProdDtlInfo(e, pGrntDvcd) {
       e.append(e26);
 
       var e27 = document.createElement('div');
-      e27.innerHTML = "문의처전화번호: " + element.qscTlno;
+      e27.innerHTML = "문의처전화번호: ";
       e.append(e27);
+
+      var e271 = document.createElement('a');
+      $(e271).addClass('text-sm');
+      e271.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
+      e271.setAttribute('href', 'tel:' + element.qscTlno);
+      e271.innerHTML = element.qscTlno;
+      e27.append(e271);
 
       var e28 = document.createElement('div');
       e28.innerHTML = "안내링크: ";
@@ -411,11 +432,18 @@ function getProdDtlInfo(e, pGrntDvcd) {
       var e2H1 = document.createElement('ul');
       e2H1.className = "px-8 list-disc";
       var lstBnk = element.trtBankCont.split('|');
-      lstBnk.forEach(function(bnkNm) {
+      lstBnk.forEach(function(bnkCd) {
         var e2H11 = document.createElement('li');
         $(e2H11).addClass('text-sm');
-        e2H11.innerHTML = bnkNm;
+        e2H11.innerHTML = bankNmMap[bnkCd] + " ";
         e2H1.append(e2H11);
+    
+        var e2H111 = document.createElement('a');
+        $(e2H111).addClass('text-sm');
+        e2H111.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
+        e2H111.setAttribute('href', 'tel:' + bankCtcMap[bnkCd]);
+        e2H111.innerHTML = bankCtcMap[bnkCd];
+        e2H11.append(e2H111);
       });
       e2H.innerHTML = "취급은행:"
       e2H.append(e2H1);
@@ -426,7 +454,7 @@ function getProdDtlInfo(e, pGrntDvcd) {
       e.append(e2G);
 
       var e2J = document.createElement('div');
-      e2J.innerHTML = "최대대출한도: " + $.number(element.maxLoanLmtAmt);
+      e2J.innerHTML = "최대대출한도: " + $.number(element.maxLoanLmtAmt) + "원";
       e.append(e2J);
 
       getJnseMaxRentAmtList(e, element.grntDvcd);
@@ -635,13 +663,13 @@ function getProdDtlInfo(e, pGrntDvcd) {
   </button>
 </div>
 
-<div id="board1" class="lg:flex lg:flex-wrap lg:m-1">
-</div>
-
 <div id="div1" class="m-10">
   <div id="rcmdCmt">
   전세자금보증을 추천합니다.
   </div>
+</div>
+
+<div id="board1" class="lg:flex lg:flex-wrap lg:m-1">
 </div>
 
 <div id="div2" class="m-10">
